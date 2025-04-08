@@ -29,6 +29,9 @@ public class EggSackEntity extends Mob {
     public AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
 
+    public AnimationState shakingAnimationState = new AnimationState();
+    private int shakingAnimationTimeout = 0;
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -43,6 +46,13 @@ public class EggSackEntity extends Mob {
             this.idleAnimationState.start(this.tickCount);
         } else {
             --this.idleAnimationTimeout;
+        }
+
+        if(this.shakingAnimationTimeout <= 0){
+            this.shakingAnimationTimeout = 40;
+            this.shakingAnimationState.start(this.tickCount);
+        } else {
+            --this.shakingAnimationTimeout;
         }
     }
 

@@ -346,13 +346,13 @@ public class ScalingAbilities {
         if (spider.tickCount % Math.max(100, (200 - (100 * multiplier))) == 0) {
             Level level = spider.level();
             RandomSource random = level.getRandom();
-            //if (spider.getTarget() != null && random.nextFloat() < 0.02f) {
+            if (spider.getTarget() != null && random.nextFloat() < 1.00f) {
                 System.out.println("Spawning egg sack!");
                 EggSackEntity eggSack = new EggSackEntity(ModEntities.EGGSACK.get(), level);
                 eggSack.moveTo(spider.getX(), spider.getY(), spider.getZ(), spider.getYRot(), spider.getXRot());
                 eggSack.setMaxAge(200);
                 level.addFreshEntity(eggSack);
-            //}
+            }
         }
     }
 

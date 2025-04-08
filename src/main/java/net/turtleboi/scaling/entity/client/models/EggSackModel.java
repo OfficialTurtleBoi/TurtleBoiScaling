@@ -64,7 +64,7 @@ public class EggSackModel<T extends Entity> extends HierarchicalModel<T> {
         if (eggSack.getAge() < eggSack.getMaxAge() - 160) {
             this.animate(eggSack.idleAnimationState, ModAnimationDefinitions.EGGSACK_IDLE, ageInTicks, 1f);
         } else {
-            this.animate(eggSack.idleAnimationState, ModAnimationDefinitions.EGGSACK_SHAKING_1, ageInTicks, 1f);
+            this.animate(eggSack.shakingAnimationState, ModAnimationDefinitions.EGGSACK_SHAKING_1, ageInTicks, 1f);
         }
     }
 
