@@ -10,6 +10,8 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.turtleboi.scaling.Scaling;
+import net.turtleboi.scaling.entity.EggSackEntity;
+import net.turtleboi.scaling.entity.client.animations.ModAnimationDefinitions;
 
 public class EggSackModel<T extends Entity> extends HierarchicalModel<T> {
     public static final ModelLayerLocation EGGSACK_LAYER = new ModelLayerLocation(new ResourceLocation(Scaling.MOD_ID, "eggsack"), "main");
@@ -56,7 +58,14 @@ public class EggSackModel<T extends Entity> extends HierarchicalModel<T> {
 
     @Override
     public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
 
+        EggSackEntity eggSack = (EggSackEntity) entity;
+        if (eggSack.getAge() < eggSack.getMaxAge() - 160) {
+            this.animate(eggSack.idleAnimationState, ModAnimationDefinitions.EGGSACK_IDLE, ageInTicks, 1f);
+        } else {
+            this.animate(eggSack.idleAnimationState, ModAnimationDefinitions.EGGSACK_SHAKING_1, ageInTicks, 1f);
+        }
     }
 
     @Override

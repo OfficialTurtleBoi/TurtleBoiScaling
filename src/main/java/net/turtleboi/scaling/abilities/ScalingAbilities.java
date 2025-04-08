@@ -25,6 +25,8 @@ import net.minecraft.world.phys.Vec3;
 import net.turtleboi.scaling.Scaling;
 import net.turtleboi.scaling.client.renderer.NecroticBurstRenderer;
 import net.turtleboi.scaling.enchantment.ModEnchantments;
+import net.turtleboi.scaling.entity.EggSackEntity;
+import net.turtleboi.scaling.entity.ModEntities;
 import net.turtleboi.turtlecore.client.util.ParticleSpawnQueue;
 import net.turtleboi.turtlecore.network.CoreNetworking;
 import net.turtleboi.turtlecore.network.packet.util.SendParticlesS2C;
@@ -341,13 +343,16 @@ public class ScalingAbilities {
     }
 
     public static void spiderSwarmAbility(Spider spider, double multiplier) {
-        Level level = spider.level();
-        RandomSource random = level.getRandom();
-        if (spider.getTarget() != null && random.nextFloat() < 0.02f) {
-            System.out.println("Spawning egg sack!");
-            //SwarmEggEntity eggSack = new SwarmEggEntity(level);
-            //eggSack.moveTo(spider.getX(), spider.getY(), spider.getZ(), spider.getYRot(), spider.getXRot());
-            //level.addFreshEntity(eggSack);
+        if (spider.tickCount % Math.max(100, (200 - (100 * multiplier))) == 0) {
+            Level level = spider.level();
+            RandomSource random = level.getRandom();
+            //if (spider.getTarget() != null && random.nextFloat() < 0.02f) {
+                System.out.println("Spawning egg sack!");
+                EggSackEntity eggSack = new EggSackEntity(ModEntities.EGGSACK.get(), level);
+                eggSack.moveTo(spider.getX(), spider.getY(), spider.getZ(), spider.getYRot(), spider.getXRot());
+                eggSack.setMaxAge(200);
+                level.addFreshEntity(eggSack);
+            //}
         }
     }
 

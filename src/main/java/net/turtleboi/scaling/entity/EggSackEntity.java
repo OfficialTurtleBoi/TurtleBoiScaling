@@ -1,27 +1,69 @@
 package net.turtleboi.scaling.entity;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
-public class EggSackEntity extends Entity {
-    public EggSackEntity(EntityType<?> pEntityType, Level pLevel) {
+public class EggSackEntity extends Mob {
+    private static final EntityDataAccessor<Integer> MAX_AGE = SynchedEntityData.defineId(EggSackEntity.class, EntityDataSerializers.INT);
+
+    public EggSackEntity(EntityType<? extends Mob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+
+    public static AttributeSupplier.Builder createAttributes(){
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 20D);
     }
 
     @Override
     protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(MAX_AGE,0);
+    }
 
+    public AnimationState idleAnimationState = new AnimationState();
+    private int idleAnimationTimeout = 0;
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.level().isClientSide){
+            setupAnimationStates();
+        }
+    }
+
+    private void setupAnimationStates(){
+        if(this.idleAnimationTimeout <= 0){
+            this.idleAnimationTimeout = 40;
+            this.idleAnimationState.start(this.tickCount);
+        } else {
+            --this.idleAnimationTimeout;
+        }
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
+    public void tick() {
+        super.tick();
 
+        if (this.tickCount > getMaxAge()) {
+            discard();
+        }
     }
 
-    @Override
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
+    public int getMaxAge() {
+        return this.entityData.get(MAX_AGE);
+    }
 
+    public void setMaxAge(int value) {
+        this.entityData.set(MAX_AGE,value);
+    }
+
+    public int getAge() {
+        return this.tickCount;
     }
 }

@@ -158,6 +158,10 @@ public class ModEvents {
 
         if (livingEntity instanceof Spider spider) {
             ScalingAbilities.handleSpiderCooldowns(spider);
+            if (multiplier >= 0.5) {
+                ScalingAbilities.spiderSwarmAbility(spider, multiplier);
+            }
+
 
             if (multiplier >= 0.75) {
                 ScalingAbilities.spiderCloakAbility(spider);
